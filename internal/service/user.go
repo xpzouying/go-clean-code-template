@@ -26,6 +26,13 @@ func NewUserService(userUC *usecase.UserUsecase) *UserService {
 
 // CreateUser create a new user.
 func (us *UserService) CreateUser(ctx context.Context, req *api.CreateUserReq) (*api.CreateUserReply, error) {
+	if req.Username == "" {
+		return nil, api.ErrEmptyUsername
+	}
+
+	if req.AvatarURL == "" {
+		return nil, api.ErrEmptyAvatar
+	}
 
 	user, err := us.userUC.CreateUser(ctx, req.Username, req.AvatarURL)
 	if err != nil {
