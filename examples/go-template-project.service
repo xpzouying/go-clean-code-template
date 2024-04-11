@@ -1,0 +1,12 @@
+# Go Template Project service
+[Unit]
+Description=go-template
+After=network.target
+
+[Service]
+LimitNOFILE=65535
+ExecStart=/usr/local/bin/go-template -c /etc/config.json
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
