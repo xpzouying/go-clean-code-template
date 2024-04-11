@@ -36,3 +36,21 @@ func (us *UserService) CreateUser(ctx context.Context, req *api.CreateUserReq) (
 		UID: user.Uid,
 	}, nil
 }
+
+func (us *UserService) GetUser(ctx context.Context, req *api.GetUserReq) (*api.GetUserReply, error) {
+
+	user, exists, err := us.userUC.GetUser(ctx, req.UID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !exists {
+		return nil, nil
+	}
+
+	return &api.GetUserReply{
+		UID:    user.Uid,
+		Name:   user.Name,
+		Avatar: user.Avatar,
+	}, nil
+}

@@ -27,11 +27,30 @@ func (s *UserUsecase) CreateUser(ctx context.Context, name, avatar string) (*dom
 
 	user, err := s.userService.CreateUser(ctx, name, avatar)
 	if err != nil {
-		s.logger.Errorf("Failed to create user: %v", err)
+		s.logger.Errorf("Failed to create user: %v", zap.Error(err))
 		return nil, err
 	}
 
 	s.logger.Infof("User created: uid=%v", user.Uid)
 
 	return user, nil
+}
+
+func (s *UserUsecase) GetUser(ctx context.Context, uid int) (*domain.User, bool, error) {
+
+	user, exists, err := s.userService.GetUser(ctx, uid)
+	if err != nil {
+		s.logger.Errorf("Failed to get user: uid=%v %v", uid, zap.Error(err))
+		return nil, false, err
+	}
+
+	if !exists {
+		s.logger.Infof("User not found: uid=%v", uid)
+		return nil, false, nil
+	}
+
+	s.logger.Infof("User found: uid=%v", uid)
+
+	return user, true, nil
+
 }

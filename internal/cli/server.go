@@ -19,7 +19,7 @@ func startHTTPServer(ctx context.Context, cfg *config.Config, svc *service.UserS
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.Default()
-	api.SetRouter(r, svc)
+	api.RegisterHTTPServer(r, svc)
 
 	svr := &http.Server{
 		Addr:    cfg.ListenAddr,

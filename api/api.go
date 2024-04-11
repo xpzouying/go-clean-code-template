@@ -13,21 +13,16 @@ import (
 // Inject it into the API layer.
 type UserService interface {
 	CreateUser(ctx context.Context, req *CreateUserReq) (*CreateUserReply, error)
+	GetUser(ctx context.Context, req *GetUserReq) (*GetUserReply, error)
 }
 
 func RegisterHTTPServer(r *gin.Engine, svc UserService) {
-	setAPIRouter(r)
-
-	setUserRouter(r, svc)
-}
-
-func SetRouter(r *gin.Engine, svc UserService) {
-
 	r.Use(middleware.GinZapLogger())
 
 	r.GET("/status", controller.HandleGetStatus)
 
 	setAPIRouter(r)
+	setUserRouter(r, svc)
 }
 
 func setAPIRouter(r *gin.Engine) {
@@ -41,4 +36,5 @@ func setUserRouter(r *gin.Engine, svc UserService) {
 	userRouter := r.Group("/user")
 
 	userRouter.POST("/create", MakeCreateUserHandle(svc))
+	userRouter.POST("/get", MakeGetUserHandle(svc))
 }

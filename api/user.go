@@ -47,3 +47,27 @@ type (
 		Avatar string `json:"avatar"`
 	}
 )
+
+func MakeGetUserHandle(svc UserService) func(c *gin.Context) {
+
+	return func(c *gin.Context) {
+		var req GetUserReq
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		reply, err := svc.GetUser(c.Request.Context(), &req)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		if reply == nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "user not found"})
+			return
+		}
+
+		c.JSON(http.StatusOK, reply)
+	}
+}
