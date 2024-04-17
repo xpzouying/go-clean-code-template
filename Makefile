@@ -3,7 +3,7 @@
 NAME=go-template-project
 BINDIR=dist
 
-GOBIN=$(shell which go)
+GOBIN ?= $(shell which go)
 
 # -- begin inject some build information --
 PACKAGE=github.com/xpzouying/go-clean-code-template/internal/constant

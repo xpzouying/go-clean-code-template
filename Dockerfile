@@ -1,5 +1,5 @@
 # 第一阶段：使用 Go 环境进行构建
-FROM golang:latest AS builder
+FROM golang:1.21 AS builder
 
 # 设置工作目录
 WORKDIR /app
@@ -18,11 +18,14 @@ COPY . .
 # 构建项目
 RUN make build
 
+# RUN ls -la /app/dist/
+# RUN find /app
+
 # 第二阶段：运行编译好的二进制文件
 FROM alpine:latest
 
 # 把二进制文件从 builder 阶段复制到当前阶段
-COPY --from=builder /app/dist/go-template /app/go-template
+COPY --from=builder /app/dist/go-template-project /app/go-template
 
 # 需要设定工作区，有保存的相对路径
 WORKDIR /app
@@ -31,4 +34,4 @@ ENV PORT 8080
 EXPOSE 8080
 
 # 运行程序
-CMD ["/app/go-template"]
+CMD ["/app/go-template", "-l", "0.0.0.0:8080"]
