@@ -1,0 +1,9 @@
+version: "3"
+services:
+  go-template:
+    build: .
+    container_name: go-template
+    command: []
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
